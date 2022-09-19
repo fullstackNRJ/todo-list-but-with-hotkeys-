@@ -1,45 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import ToDoItem from "./TodoItem";
 import "./index.css";
 import { useTodoProvider } from "./useTodoList";
-import { HotKeys } from "react-hotkeys";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type TodoListProps = {};
 
-const keyMap = {
-  ADD_A_TODO: "enter",
-  DELETE_A_TODO: "del",
-};
 const TodoList: React.FC<TodoListProps> = () => {
+  const { todoList, setTodoList } = useTodoProvider();
+  const [bool, setBool] = useState(false);
+
   const addATodo = () => {
     setTodoList([...todoList, ""]);
   };
+
   const deleteLastTodo = () => {
     const newList = [...todoList];
     newList.pop();
     setTodoList(newList);
   };
-  const handlers = {
-    ADD_A_TODO: addATodo,
-    DELETE_A_TODO: deleteLastTodo,
-  };
-  const { todoList, setTodoList } = useTodoProvider();
+
+  useHotkeys(bool ? "del" : "backspace", deleteLastTodo);
+  useHotkeys("enter", addATodo);
 
   return (
-    <HotKeys keyMap={keyMap}>
-      <div>
-        <div className="controlsbar">
-          <button onClick={addATodo}>ADD</button>
-        </div>
-        {todoList.map((item, index) => {
-          return (
-            <HotKeys handlers={handlers} key={`${index}+${item}`}>
-              <ToDoItem content={item} index={index} key={`${index}+${item}`} />
-            </HotKeys>
-          );
-        })}
+    <div>
+      <div className="controlsbar">
+        <button onClick={addATodo}>ADD</button>
+        <button
+          onClick={() => {
+            setBool(!bool);
+          }}
+        >
+          FLIP
+        </button>
       </div>
-    </HotKeys>
+      {todoList.map((item, index) => {
+        return <ToDoItem content={item} index={index} key={index} />;
+      })}
+    </div>
   );
 };
 
