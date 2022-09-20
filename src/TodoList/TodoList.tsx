@@ -14,26 +14,22 @@ const TodoList: React.FC<TodoListProps> = () => {
 
   const addATodo = () => {
     console.log("LENGTH", todoList.length);
-
     setTodoList((prv) => [...prv, ""]);
   };
 
   const deleteLastTodo = () => {
-    // let newList = [...todoList];
-    // newList.pop();
     setTodoList((prv) => {
       const newState = [...prv];
       newState.pop();
-
       return newState;
     });
   };
 
-  useHotkeys("enter", addATodo);
-  useHotkeys("backspace", deleteLastTodo);
+  const addRef = useHotkeys("enter", addATodo);
+  const delRef = useHotkeys("backspace", deleteLastTodo);
 
   return (
-    <div>
+    <div ref={addRef as any} tabIndex={-1}>
       <div className="controlsbar">
         <button onClick={addATodo}>ADD</button>
         <button

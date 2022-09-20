@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, Ref, useEffect, useRef } from "react";
 
 type InputProps = {
   value: string;
@@ -8,10 +8,26 @@ type InputProps = {
 };
 
 const Input: React.FC<InputProps> = ({ id, value, onChange, label }) => {
+  const ref: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+  const deFocus = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      ref.current!.blur();
+    }
+  };
+
+  useEffect(() => {
+    const input = ref.current;
+    input!.addEventListener("keydown", deFocus);
+    return () => {
+      input!.removeEventListener("keydown", deFocus);
+    };
+  }, []);
+
   return (
     <div>
       {label ? <label htmlFor={id}>{label}</label> : null}
       <input
+        ref={ref}
         type="text"
         onChange={onChange as ChangeEventHandler<HTMLInputElement>}
         value={value}
