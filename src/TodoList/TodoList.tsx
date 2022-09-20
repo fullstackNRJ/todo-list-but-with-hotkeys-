@@ -7,21 +7,30 @@ import { useHotkeys } from "react-hotkeys-hook";
 type TodoListProps = {};
 
 const TodoList: React.FC<TodoListProps> = () => {
+  // const [todoList, setTodoList] = useState<string[]>([]);
+
   const { todoList, setTodoList } = useTodoProvider();
-  const [bool, setBool] = useState(false);
+  // const [bool, setBool] = useState(false);
 
   const addATodo = () => {
-    setTodoList([...todoList, ""]);
+    console.log("LENGTH", todoList.length);
+
+    setTodoList((prv) => [...prv, ""]);
   };
 
   const deleteLastTodo = () => {
-    const newList = [...todoList];
-    newList.pop();
-    setTodoList(newList);
+    // let newList = [...todoList];
+    // newList.pop();
+    setTodoList((prv) => {
+      const newState = [...prv];
+      newState.pop();
+
+      return newState;
+    });
   };
 
-  useHotkeys(bool ? "del" : "backspace", deleteLastTodo);
   useHotkeys("enter", addATodo);
+  useHotkeys("backspace", deleteLastTodo);
 
   return (
     <div>
@@ -29,7 +38,7 @@ const TodoList: React.FC<TodoListProps> = () => {
         <button onClick={addATodo}>ADD</button>
         <button
           onClick={() => {
-            setBool(!bool);
+            // setBool(!bool);
           }}
         >
           FLIP
