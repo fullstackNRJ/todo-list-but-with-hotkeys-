@@ -1,27 +1,28 @@
-import React, { ChangeEventHandler, Ref, useEffect, useRef } from "react";
+import React, { ChangeEventHandler, useEffect } from "react";
 
 type InputProps = {
+  ref: React.MutableRefObject<HTMLInputElement | null>;
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   id: string;
   label: string;
 };
 
-const Input: React.FC<InputProps> = ({ id, value, onChange, label }) => {
-  const ref: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
-  const deFocus = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      ref.current!.blur();
-    }
-  };
+const Input: React.FC<InputProps> = React.forwardRef(({ ref, id, value, onChange, label }) => {
+  // const ref: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+  // const deFocus = (e: KeyboardEvent) => {
+  //   if (e.key === "Escape") {
+  //     ref.current!.blur();
+  //   }
+  // };
 
-  useEffect(() => {
-    const input = ref.current;
-    input!.addEventListener("keydown", deFocus);
-    return () => {
-      input!.removeEventListener("keydown", deFocus);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const input = ref.current;
+  //   input!.addEventListener("keydown", deFocus);
+  //   return () => {
+  //     input!.removeEventListener("keydown", deFocus);
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -42,6 +43,6 @@ const Input: React.FC<InputProps> = ({ id, value, onChange, label }) => {
       />
     </div>
   );
-};
+});
 
 export default Input;

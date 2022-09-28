@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useRef } from "react";
 import { Input } from "./../TextInput";
 import useTodoProvider from "./useTodoList";
 
@@ -10,6 +10,8 @@ type ToDoItemProps = {
 const ToDoItem: React.FC<ToDoItemProps> = ({ content, index }) => {
   const { setTodoList, todoList } = useTodoProvider();
 
+  const ref: React.MutableRefObject<null | HTMLInputElement> = useRef(null);
+
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newTodoList = [...todoList];
     newTodoList[index] = event.target.value;
@@ -18,7 +20,7 @@ const ToDoItem: React.FC<ToDoItemProps> = ({ content, index }) => {
 
   return (
     <div style={{ margin: "2rem" }}>
-      <Input value={content} onChange={onChange} id={JSON.stringify(index)} label={""} />
+      <Input ref={ref} value={content} onChange={onChange} id={JSON.stringify(index)} label={""} />
     </div>
   );
 };
